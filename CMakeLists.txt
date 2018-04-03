@@ -14,17 +14,20 @@ add_definitions(/DMX_COMPAT_32)
 find_package(Matlab)
 if(MATLAB_FOUND)
   add_definitions(-DUSE_MEX)
+  set(MEX_FILES src/mex/addMex.cpp )
 endif(MATLAB_FOUND)
-
-#find_package(CUDA)
-if(CUDA_FOUND)
-  add_definitions(-DUSE_CUDA)
-endif(CUDA_FOUND)
 
 #find_package(OpenCV)
 if(OPENCV_FOUND)
   add_definitions(-DUSE_OPENCV)
 endif(OPENCV_FOUND)
+  set(CPP_FILES src/lib/add.cpp )
+
+find_package(CUDA)
+if(CUDA_FOUND)
+  add_definitions(-DUSE_CUDA)
+  set(CU_FILES src/lib/gpuadd.cu )
+endif(CUDA_FOUND)
 
 
 ######################################################
@@ -37,11 +40,10 @@ if(MATLAB_FOUND AND CUDA_FOUND)#build mex file with cuda support
   set(CU_MEX_LIB_NAME "${PROJECT_NAME}CUDA")
   
   # set up cuda & matlab libraries
-  set(SRC_FILES src/cudaAdd.cu)
   set(CUDA_NVCC_FLAGS -Xcompiler -fPIC -use_fast_math -gencode=arch=compute_20,code="sm_20,compute_20" --ptxas-options=-v -DMATLAB_MEX_FILE -G -g -O0)
   include_directories(${MATLAB_INCLUDE_DIR})
-  cuda_compile(${CU_MEX_LIB_NAME} ${SRC_FILES} SHARED)
-  add_library(${CU_MEX_LIB_NAME} SHARED ${${CU_MEX_LIB_NAME}} ${SRC_FILES} ${CMAKE_SOURCE_DIR}/Matlabdef.def)
+  cuda_compile(${CU_MEX_LIB_NAME} ${MEX_FILES} ${CU_FILES} SHARED)
+  add_library(${CU_MEX_LIB_NAME} SHARED ${${CU_MEX_LIB_NAME}} ${MEX_FILES} ${CU_FILES} ${CMAKE_SOURCE_DIR}/Matlabdef.def)
   target_link_libraries(${CU_MEX_LIB_NAME} ${MATLAB_LIBRARIES} ${CUDA_LIBRARIES})
   set_target_properties(${CU_MEX_LIB_NAME} PROPERTIES PREFIX "" LINKER_LANGUAGE CXX)
   
@@ -77,9 +79,8 @@ if(MATLAB_FOUND AND NOT CUDA_FOUND)#build mex file for c++ without cuda support
   set(CPP_MEX_LIB_NAME "${PROJECT_NAME}")
 
 # set up matlab libraries
-set(CPP_FILE_NAME src/cudaAdd.cpp)
 INCLUDE_DIRECTORIES(${MATLAB_INCLUDE_DIR})
-add_library(${CPP_MEX_LIB_NAME} SHARED ${CPP_FILE_NAME} ${CMAKE_SOURCE_DIR}/Matlabdef.def)
+add_library(${CPP_MEX_LIB_NAME} SHARED ${MEX_FILES} ${CPP_FILES} ${CMAKE_SOURCE_DIR}/Matlabdef.def)
 target_link_libraries(${CPP_MEX_LIB_NAME} ${MATLAB_LIBRARIES})
 
 # 32-bit or 64-bit mex
