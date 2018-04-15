@@ -1,5 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
-PROJECT(mweAdd)
+PROJECT(mweAdd) #project name
 
 ##################ADJUST##############################
 ######################################################
@@ -21,8 +21,7 @@ SET(CPP_SRC_FILES src/lib/add.cpp ) #cpp files needed for built with non-cuda su
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin) #output for executable i.e., EXEF=TRUE
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)    #output for mex-file i.e., MEXF=TRUE
 
-#add modules e.g., FindMatlab.cmake
-SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake) #add modules e.g., FindMatlab.cmake
 
 ##################FIND MATLAB#########################
 ######################################################
@@ -53,13 +52,18 @@ endif(${MEXF})
 ##################FIND CUDA###########################
 ######################################################
 if(${CUDA})
+
   FIND_PACKAGE(CUDA)
   ADD_DEFINITIONS(-DUSE_CUDA)
   SET(SRC_FILES ${COMMON_SRC_FILES} ${CU_SRC_FILES} )
-  #compiler flags
+
+  #compiler flags for cuda
   SET(CUDA_NVCC_FLAGS -Xcompiler -fPIC -use_fast_math -gencode=arch=compute_20,code="sm_20,compute_20" --ptxas-options=-v -DMATLAB_MEX_FILE -G -g -O0 -Wno-deprecated-gpu-targets)
+
 else(${CUDA})
+
   SET(SRC_FILES ${COMMON_SRC_FILES} ${CPP_SRC_FILES} )
+
 endif(${CUDA})
 
 ######################################################
@@ -68,31 +72,35 @@ endif(${CUDA})
 
 ######################MEX#############################
 ######################################################
-if(${MEXF})#build mex file with cuda support
-  # compile cuda mex for shader models 2.0 as default, support double
+if(${MEXF})
+
   SET(MEX_LIB_NAME "${PROJECT_NAME}MEX")
   
-  # set up cuda & matlab libraries
+  # set up matlab libraries
   INCLUDE_DIRECTORIES(${MATLAB_INCLUDE_DIR})
   ADD_LIBRARY(${MEX_LIB_NAME} SHARED ${MEX_MAIN_FILES} ${SRC_FILES} ${CMAKE_SOURCE_DIR}/Matlabdef.def)
   TARGET_LINK_LIBRARIES(${MEX_LIB_NAME} ${MATLAB_LIBRARIES})
   SET_TARGET_PROPERTIES(${MEX_LIB_NAME} PROPERTIES PREFIX "" SUFFIX ${MEX_SUFFIX})
-  if(${CUDA})
+
+  if(${CUDA}) #now set up cuda libraries
     CUDA_COMPILE(${MEX_LIB_NAME} ${MEX_MAIN_FILES} ${SRC_FILES} SHARED)
     TARGET_LINK_LIBRARIES(${MEX_LIB_NAME} ${CUDA_LIBRARIES})
     SET_TARGET_PROPERTIES(${MEX_LIB_NAME} PROPERTIES LINKER_LANGUAGE CXX)
   endif(${CUDA})
+
 endif(${MEXF})
 
 
 ##################EXECUTABLE##########################
 ######################################################
-if(${EXEF})#build executable
+if(${EXEF})
+
   if(${CUDA})
     CUDA_ADD_EXECUTABLE( ${PROJECT_NAME} ${CPP_MAIN_FILES} ${SRC_FILES} )
   else(${CUDA})
     ADD_EXECUTABLE(${PROJECT_NAME} ${CPP_MAIN_FILES} ${SRC_FILES})
   endif(${CUDA})
+
 endif(${EXEF})
 
 
