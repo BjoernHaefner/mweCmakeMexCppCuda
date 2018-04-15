@@ -2,6 +2,9 @@
  Sample CUDA MEX code written by Fang Liu (leoliuf@gmail.com).
 ************************************************************************/
 
+#ifndef _MAIN_MEX_CPP_
+#define _MAIN_MEX_CPP_
+
 #ifdef USE_MEX
 
 /* system header */
@@ -12,11 +15,9 @@
 #include <vector>
 #include <iostream>
 
-#ifdef USE_MEX
 /* MEX header */
 #include <mex.h> 
 #include "matrix.h"
-#endif //USE_MEX
 
 /* fixing error : identifier "IUnknown" is undefined" */
 #ifdef _WIN32
@@ -77,3 +78,5 @@ void mexFunction(int nlhs, mxArray *plhs[],int nrhs, const mxArray *prhs[])
     
 }
 #endif//USE_MEX
+
+#endif
