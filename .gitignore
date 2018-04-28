@@ -1,2 +1,2 @@
-build/**
+#ignore all files with ~ ending (matlab temp files)
 **/*~
