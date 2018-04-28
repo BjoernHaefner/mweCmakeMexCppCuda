@@ -11,20 +11,10 @@
 
 __global__ void gpuaddkernel(double *d_A, double *d_B, double *d_C, size_t Am, size_t An)
 {
-    /* index */
-	unsigned int tid = blockIdx.x * blockDim.y + threadIdx.y; /* thread id in matrix*/
-	/* strip */
-	unsigned int strip = gridDim.x * blockDim.y;
-
-	while (1) {
-	 if (tid  < Am * An){
-		d_C[tid] = d_A[tid] + d_B[tid];
-	 }
-	 else{
-	    break;
-	 }
-	 tid += strip;
-	}
+  int x = threadIdx.x + blockDim.x * blockIdx.x;
+  int y = threadIdx.y + blockDim.y * blockIdx.y;
+  int ind = x + An*y; //derive linear index
+  if (x<An && y<Am) d_C[ind] = d_A[ind] + d_B[ind];
 }
 
 void gpuadd(double *A, double *B, double *C, size_t Am, size_t An)
@@ -38,8 +28,9 @@ void gpuadd(double *A, double *B, double *C, size_t Am, size_t An)
     return;
   }
 
-  dim3 dimGridImg(8,1,1);
-  dim3 dimBlockImg(1,64,1);
+  dim3 block = dim3(32,8,1); // 32*8*1 = 256 threads per block
+  // ensure enough blocks to cover w * h elements (round up)
+  dim3 grid = dim3( ( An + block.x -1 ) / block.x, ( Am + block.y - 1 ) / block.y, 1);
 	
   /* allocate device memory for matrices */
   double *d_A = NULL;
@@ -52,7 +43,7 @@ void gpuadd(double *A, double *B, double *C, size_t Am, size_t An)
   cudaMalloc( (void**) &d_C, Am * An * sizeof(double)) ;
     
 	/* call GPU kernel for addition */
-	gpuaddkernel<<< dimGridImg, dimBlockImg >>>(d_A, d_B, d_C, Am, An);
+	gpuaddkernel<<< grid, block >>>(d_A, d_B, d_C, Am, An);
 	cudaThreadSynchronize();
     
   /* copy result from device */

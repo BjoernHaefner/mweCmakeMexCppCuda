@@ -13,7 +13,7 @@ A = rand(dim_r, dim_c);
 B = rand(dim_r, dim_c);
 
 tic
-ApB_mex = MumfordShahMEX(A,B);
+ApB_mex = mweAddMEX(A,B);
 toc
 
 tic
