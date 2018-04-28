@@ -19,7 +19,7 @@ SET(CPP_SRC_FILES src/lib/cpuadd.cpp src/lib/cpuadd.h ) #cpp files needed for bu
 
 #set libraries
 SET(OPENCV_LIB OpenCV) #used for non-mex build only
-SET(CUDA_LIBS CUDA_CUBLAS_LIBRARIES CUDA_CUFFT_LIBRARIES)#CUDA_CUFFT_LIBRARIES #used for cuda build only
+SET(CUDA_LIBS CUDA_CUBLAS_LIBRARIES CUDA_CUFFT_LIBRARIES) #used for cuda build only
 SET(EIGEN_LIB Eigen3)#used for mex, non-mex and cuda build
 
 ##################SETUP###############################
