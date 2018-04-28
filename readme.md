@@ -27,11 +27,12 @@ This code has been tested under
   cmake ..
   make
 * in build/lib is the mex file and in build/bin is the binary
-* cd../example
+* cd  ../example
 * execute the matlab script and the bash script
 
 ## Information
 * The cmake file is supposed to be generic enough to easily integrate this to existing code and/or to easily built up on it to generate a versatile cpp/mex/cuda project.
+
 ### Possibilities
 * Decide whether to generate a mex file: SET(MEXF {TRUE,FALSE})
 * Decide whether to generate a binary file: SET(EXEF {TRUE,FALSE})
@@ -52,4 +53,4 @@ Additionally, this framework uses OpenCV and Eigen as some dummy libraries to sh
 * CUBLAS and CUFFT libraries are linked and can be easily extended
 
 ## Tips
-* It can happen that the building process during 'make' fails. This can be due to the fact that the gpuadd.o is build twice (haven't found a way to fix this yet). Run 'make' a couple of times to overcome this issue, for me this error happend every ~10th build process, so I didnt' see the urge of fixing it.
+* It can happen that the building process during 'make' fails. This can be due to the fact that the gpuadd.o is build twice (haven't found a way to fix this yet). Run 'make' a couple of times to overcome this issue, for me this error happend every ~10th building process, so I didnt' see the urge of fixing it.
