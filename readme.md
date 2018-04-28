@@ -1,4 +1,4 @@
-# MWE using cmake to compe MEX and/or binary with or without CUDA support and additional libraries
+# MWE using cmake to compile MEX and/or binary with or without CUDA support and additional libraries
 This work is build upon the following two helpful links:
 [CUDA-MEX-CMAKE](https://de.mathworks.com/matlabcentral/fileexchange/45505-cuda-mex-cmake)
 [MEX-CMAKE](https://de.mathworks.com/matlabcentral/fileexchange/45522-mex-cmake)
