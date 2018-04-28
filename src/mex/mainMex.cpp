@@ -1,7 +1,3 @@
-/************************************************************************
- Sample CUDA MEX code written by Fang Liu (leoliuf@gmail.com).
-************************************************************************/
-
 #ifndef _MAIN_MEX_CPP_
 #define _MAIN_MEX_CPP_
 
@@ -35,7 +31,7 @@
 void mexFunction(int nlhs, mxArray *plhs[],int nrhs, const mxArray *prhs[])
 
 {
-  printf("My Version of the code!!!!\n");
+  printf("The mexFunction got called and data is being copied\n");
   
   double *A, *B, *C;
   size_t Am, An, Bm, Bn; 
@@ -66,7 +62,8 @@ void mexFunction(int nlhs, mxArray *plhs[],int nrhs, const mxArray *prhs[])
   /* allocate output */
   plhs[0] = mxCreateDoubleMatrix(Am, An, mxREAL);
   C = mxGetPr(plhs[0]);
-
+  
+  printf("Start to add vectors/matrices...\n");
   add(A, B, C, Am, An);    
     
 }

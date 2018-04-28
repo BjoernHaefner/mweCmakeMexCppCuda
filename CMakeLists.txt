@@ -6,7 +6,7 @@ PROJECT(mweAdd) #project name
 #what shall be build?
 SET(MEXF TRUE) #generate mex file for matlab usage
 SET(EXEF TRUE) #generate executable to call code from commandline
-SET(CUDA TRUE) #use cuda for speedup if applicable
+SET(CUDA FALSE) #use cuda for speedup if applicable
 
 #set cpp and cuda files
 SET(CPP_MAIN_FILES src/main.cpp) #main file(s) for cpp

@@ -14,7 +14,8 @@
 int main(int argc, char *argv[])
 {
 
-  //print input 
+  //print input
+  printf("The commandline input is:\n");
   for(int ndx = 0; ndx < argc; ++ndx)
     printf("argv[%d] --> %s\n", ndx,argv[ndx]);
 
@@ -28,16 +29,19 @@ int main(int argc, char *argv[])
   A[0] = atof(argv[1]);
   B[0] = atof(argv[2]);
 
-
+  
+  printf("\nNow add the two values stored in argv[1] and argv[2]:\n");
   add(A, B, C, Am, An);  
 
-  printf("A[0] + B[0] = %f + %f = %f\n", A[0], B[0], C[0]);
+  printf("Now you can check for yourself:\n");
+  printf("A[0] + B[0] = %f + %f = %f\n\n", A[0], B[0], C[0]);
 
   free(A);
   free(B);
   free(C);
 
   //show the input image
+  printf("Last, we quickly read an image to check if opencv works in the binary version...\n");
   cv::Mat image;
   image = cv::imread( argv[3], 1 );
 
