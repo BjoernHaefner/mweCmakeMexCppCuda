@@ -36,8 +36,8 @@ MESSAGE(STATUS "CUDA=" ${CUDA})
 
 ##################FIND OTHER LIBRARIES################
 ######################################################
-find_package( ${OPENCV_LIB} REQUIRED)
-find_package( ${EIGEN_LIB} REQUIRED)
+FIND_PACKAGE( ${OPENCV_LIB} REQUIRED)
+FIND_PACKAGE( ${EIGEN_LIB}  REQUIRED)
 
 ##################FIND MATLAB#########################
 ######################################################
@@ -80,9 +80,11 @@ if(${CUDA})
   ADD_DEFINITIONS(-DUSE_CUDA)
 
   # set SRC_FILES using the common cpp files and cu source files
-  SET(SRC_FILES ${COMMON_SRC_FILES} ${CU_SRC_FILES} )
+  SET(SRC_FILES ${COMMON_SRC_FILES} ${CU_SRC_FILES})
+
+  #to correctly include the above cuda libraries, a splitting must take place
   foreach(libname ${CUDA_LIBS})
-    list(APPEND CUDA_LIBS_SEP ${${libname}})
+    LIST(APPEND CUDA_LIBS_SEP ${${libname}})
   endforeach(${CUDA_LIBS_SEP})
 
   #compiler flags for cuda
@@ -92,8 +94,8 @@ if(${CUDA})
 	-use_fast_math
 	-gencode=arch=compute_20,code="sm_20,compute_20"
 	--ptxas-options=-v
-	--device-debug #possibility to debug device code; uncomment for speedup
-	--debug #possibility to debug host code; uncomment for speedup
+	#--device-debug #possibility to debug device code; uncomment for speedup
+	#--debug #possibility to debug host code; uncomment for speedup
 	-O3 #specify optimization level for host code
 	-Wno-deprecated-gpu-targets #to suppress warning for deprecated architectures
 	)
@@ -122,7 +124,10 @@ if(${MEXF})
   ADD_LIBRARY(${MEX_LIB_NAME} SHARED ${${MEX_LIB_NAME}} ${MEX_MAIN_FILES} ${SRC_FILES} ${CMAKE_SOURCE_DIR}/Matlabdef.def)
 
   MESSAGE(STATUS "LINKING CUDA LIBRARIES: " ${CUDA_LIBS_SEP})
-  TARGET_LINK_LIBRARIES(${MEX_LIB_NAME} ${MATLAB_LIBRARIES} Eigen3::Eigen)
+  TARGET_LINK_LIBRARIES(${MEX_LIB_NAME}
+                        ${MATLAB_LIBRARIES}
+                        Eigen3::Eigen #in any case link to Eigen library for the mex file
+                        )
   if(${CUDA})
     TARGET_LINK_LIBRARIES(${MEX_LIB_NAME}
                           ${CUDA_LIBRARIES} #Cudart library.
@@ -148,13 +153,13 @@ if(${EXEF}) #now take care of the executabel
                           ${CUDA_LIBRARIES} #Cudart library.
                           ${CUDA_LIBS_SEP} #own specified libraries from above. Note the double "${${}}", this is because above the CUDA_CUBLAS_LIBRARIES is unknown and first known after Cuda was found
                           ${OpenCV_LIBS} #load opencv libs
-                          Eigen3::Eigen
+                          Eigen3::Eigen #link to eigen library for binary with cuda support
                           )
   else(${CUDA})#is cuda is not used
     ADD_EXECUTABLE(${PROJECT_NAME} ${CPP_MAIN_FILES} ${SRC_FILES})
     TARGET_LINK_LIBRARIES(${PROJECT_NAME}
                           ${OpenCV_LIBS} #load opencv libs
-                          Eigen3::Eigen
+                          Eigen3::Eigen #link to eigen library for binary without cuda support
                           )
 endif(${CUDA})
 
