@@ -2,10 +2,12 @@
 clc
 clear all;
 
-addpath('../../build/lib/')
+restoredefaultpath;
+
+addpath(genpath('../build/lib/'))
 
 %%
-max_limit = 1;
+max_limit = 1000;
 dim_r = randi(max_limit);
 dim_c = randi(max_limit);
 

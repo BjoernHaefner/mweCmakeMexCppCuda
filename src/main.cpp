@@ -5,21 +5,20 @@
 #include <stdio.h>      /* printf, scanf, NULL */
 #include <stdlib.h>     /* malloc, free, rand */
 
-#ifdef USE_CUDA
-/* includes CUDA kernel */
-#include "lib/gpuadd.cuh"
+//OpenCV
+#include <opencv2/opencv.hpp>
 
-#else //USE_CUDA
-/* includes CPP 'kernel' */
+//own code
 #include "lib/add.h"
-
-#endif //USE_CUDA
 
 int main(int argc, char *argv[])
 {
 
-  if (argc != 3) return -1;
+  //print input 
+  for(int ndx = 0; ndx < argc; ++ndx)
+    printf("argv[%d] --> %s\n", ndx,argv[ndx]);
 
+  //add the two values  
   double *A = (double*) malloc (1);
   double *B = (double*) malloc (1);
   double *C = (double*) malloc (1);
@@ -29,25 +28,28 @@ int main(int argc, char *argv[])
   A[0] = atof(argv[1]);
   B[0] = atof(argv[2]);
 
-  printf("argc = %d\n", argc);
-  for(int ndx = 0; ndx != argc; ++ndx)
-    printf("argv[%d] --> %s\n", ndx,argv[ndx]);
-  printf("argv[argc] = %p\n", (void*)argv[argc]);
 
-
-
-
-#ifdef USE_CUDA
-  gpuadd(A, B, C, Am, An); 
-#else
-	add(A, B, C, Am, An);    
-#endif
+  add(A, B, C, Am, An);  
 
   printf("A[0] + B[0] = %f + %f = %f\n", A[0], B[0], C[0]);
 
   free(A);
   free(B);
   free(C);
+
+  //show the input image
+  cv::Mat image;
+  image = cv::imread( argv[3], 1 );
+
+  if ( !image.data )
+  {
+      printf("No image data \n");
+      return -1;
+  }
+  else
+  {
+    printf("Could read image. OpenCV is working\n");
+  }
 
   return 0;
 
