@@ -139,12 +139,12 @@ if(${MEXF})
 
   ADD_LIBRARY(${MEX_LIB_NAME} SHARED ${${MEX_LIB_NAME}} ${MEX_MAIN_FILES} ${SRC_FILES} ${CMAKE_SOURCE_DIR}/Matlabdef.def)
 
-  MESSAGE(STATUS "LINKING CUDA LIBRARIES: " ${CUDA_LIBS_SEP})
   TARGET_LINK_LIBRARIES(${MEX_LIB_NAME}
                         ${MATLAB_LIBRARIES}
                         Eigen3::Eigen #in any case link to Eigen library for the mex file
                         )
   if(${CUDA})
+    MESSAGE(STATUS "LINKING CUDA LIBRARIES: " ${CUDA_LIBS_SEP})
     TARGET_LINK_LIBRARIES(${MEX_LIB_NAME}
                           ${CUDA_LIBRARIES} #Cudart library.
                           ${CUDA_LIBS_SEP} #own specified libraries from above. Note the double "${${}}", this is because above the CUDA_CUBLAS_LIBRARIES is unknown and first known after Cuda was found
