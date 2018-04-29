@@ -22,10 +22,10 @@ This code has been tested under
 ## Getting started
 * Set `MATLAB_ROOT` environment variable in `~/.bashrc` to your installed matlab path, such as 
   export `MATLAB_ROOT=/usr/local/MATLAB/R2016b`
-* In Terminal do\
-  `cd path/to/mweCmakeMexCppCuda/build`\
-  `cmake ..`\
-  `make`
+* In Terminal do  
+     `cd path/to/mweCmakeMexCppCuda/build`  
+     `cmake ..`  
+     `make`
 * in `build/lib` is the mex file and in `build/bin` is the binary
 * `cd  ../example`
 * execute the matlab script and/or the bash script
