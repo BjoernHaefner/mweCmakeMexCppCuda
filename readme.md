@@ -20,12 +20,12 @@ This code has been tested under
 * TODO: Test using MacOS and Windows (To compile the test MEX under Windows, first set `MATLAB_ROOT` environment variable to your installed matlab path, then, use cmake or cmake-gui to generate building project according to installed compiler (e.g. MSVS), then, build the generated project using this compiler.)
 
 ## Getting started
-* Set `MATLAB_ROOT` environment variable in `~/.bashrc` to your installed matlab path, such as
+* Set `MATLAB_ROOT` environment variable in `~/.bashrc` to your installed matlab path, such as  
    export `MATLAB_ROOT=/usr/local/MATLAB/R2016b`
 * In Terminal do  
-     `cd path/to/mweCmakeMexCppCuda/build`  
-     `cmake ..`  
-     `make`
+   `cd path/to/mweCmakeMexCppCuda/build`  
+   `cmake ..`  
+   `make`
 * in `build/lib` is the mex file and in `build/bin` is the binary
 * `cd  ../example`
 * execute the matlab script and/or the bash script
