@@ -11,8 +11,8 @@ This is a cmake code template to demonstrate how to compile a Matlab MEX file wi
 * [CMake](https://cmake.org/) (mandatory)
 * [CUDA](https://developer.nvidia.com/cuda-downloads) (optional)
 * [MATLAB](https://de.mathworks.com/) (optional)
-* [OpenCV](https://de.mathworks.com/) (mandatory dummy)
-* [Eigen3](https://de.mathworks.com/) (mandatory dummy)
+* [OpenCV](https://opencv.org/) (mandatory dummy)
+* [Eigen3](http://eigen.tuxfamily.org/index.php?title=Main_Page) (mandatory dummy)
 
 ## Tested
 This code has been tested under 
@@ -46,7 +46,7 @@ There are multiple integrated ways to link source code e.g.,
 * CU_SRC_FILES are all the cuda files that replace the corresponding cpp files
 * CPP_SRC_FILES are all the cpp files that replace the cuda files
 
-### Library support
+### Library setup
 Additionally, this framework uses OpenCV and Eigen as some dummy libraries to show the versatility of this framework.
 * OpenCV is used only for the binary build
 * Eigen is used in the case of building MEX and binary files with or without CUDA support

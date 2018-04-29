@@ -4,6 +4,7 @@
 #include <stdio.h> //size_t
 #include <math.h> //fabs
 #include <cstring> //memcpy
+#include <iostream> //cout
 
 //CUDA libraries
 #include "cublas_v2.h"
@@ -124,7 +125,7 @@ void gpuadd(double *A, double *B, double *C, size_t Am, size_t An)
   double *d_C = NULL;
   cudaMalloc( (void**) &d_C, Am * An * sizeof(double)) ;
     
-  printf("Values/Vectors/Matrices are added using a self-implemented kernel\n");
+  std::cout << "Values/Vectors/Matrices are added using a self-implemented kernel" << std::endl;
 	/* call GPU kernel for addition */
 	gpuaddkernel<<< grid, block >>>(d_A, d_B, d_C, Am, An);
 	cudaDeviceSynchronize();
@@ -140,12 +141,12 @@ void gpuadd(double *A, double *B, double *C, size_t Am, size_t An)
   cudaFree(d_C);
 
 //Now add pointers with cublas
-  printf("Addtionally, the same values are added using cublas\n");
+  std::cout << "Addtionally, the same values are added using cublas" << std::endl;
   double *C_cublas = new double [Am*An];
 	gpuaddcublas(A, B, C_cublas, Am, An);
 
 //Compare results
-  printf("And now both results will be compared...\n");
+  std::cout << "And now both results will be compared..." << std::endl;;
 bool equal = true;
 for (size_t ii=0; ii<Am*An; ii++)
   if (!(fabs(C_kernel[ii]-C_cublas[ii])<0.001))
@@ -153,15 +154,15 @@ for (size_t ii=0; ii<Am*An; ii++)
 
 if (equal)
 {
-  printf("Yeah, both arrays have the same values\n\n");
+  std::cout << "Yeah, both arrays have the same values" << std::endl << std::endl;
   std::memcpy( (void*)C, (void*) C_kernel, Am * An * sizeof(double) );
   free(C_kernel);
   free(C_cublas);
 }
 else
 {
-  printf("Oh no, cublas and your own kernel differ too much in results.\n");
-  printf("Copy kernel results now, but handle with caution.\n\n");
+  std::cout << "Oh no, cublas and your own kernel differ too much in results." << std::endl;
+  std::cout << "Copy kernel results now, but handle with caution." << std::endl << std::endl;
   std::memcpy( (void*)C, (void*) C_kernel, Am * An * sizeof(double) );
   free(C_kernel);
   free(C_cublas);

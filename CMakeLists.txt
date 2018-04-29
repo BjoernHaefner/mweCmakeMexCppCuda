@@ -1,28 +1,44 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(mweAdd) #project name
 
+######################################################
 ##################ADJUST##############################
 ######################################################
 #what shall be build?
 SET(MEXF TRUE) #generate mex file for matlab usage
 SET(EXEF TRUE) #generate executable to call code from commandline
-SET(CUDA FALSE) #use cuda for speedup if applicable
+SET(CUDA TRUE) #use cuda for speedup if applicable
 
-#set cpp and cuda files
-SET(CPP_MAIN_FILES src/main.cpp) #main file(s) for cpp
-SET(MEX_MAIN_FILES src/mex/mainMex.cpp ) #main file(s) for mex (mex entrance function)
+##################CPP & CUDA FILES####################
+######################################################
+#file(s) for binary version only
+SET(CPP_MAIN_FILES src/main.cpp)
 
-SET(COMMON_SRC_FILES src/lib/add.cpp src/lib/add.h ) #files needed for both, cpp and cuda built
+#file(s) for mex ( e.g. mex entrance function) version only
+SET(MEX_MAIN_FILES src/mex/mainMex.cpp )
 
-SET(CU_SRC_FILES src/lib/cuda/gpuadd.cu src/lib/cuda/gpuadd.cuh ) #cuda files (e.g. kernels)
-SET(CPP_SRC_FILES src/lib/cpuadd.cpp src/lib/cpuadd.h ) #cpp files needed for built with non-cuda support only
+#files needed for both, cpp and cuda built
+SET(COMMON_SRC_FILES src/lib/add.cpp src/lib/add.h )
 
-#set libraries
-SET(OPENCV_LIB OpenCV) #used for non-mex build only
-SET(CUDA_LIBS CUDA_CUBLAS_LIBRARIES CUDA_CUFFT_LIBRARIES) #used for cuda build only
-SET(EIGEN_LIB Eigen3)#used for mex, non-mex and cuda build
+#cuda files (e.g. kernels)
+SET(CU_SRC_FILES src/lib/cuda/gpuadd.cu src/lib/cuda/gpuadd.cuh )
 
-##################SETUP###############################
+#cpp files needed for built with non-cuda support only
+SET(CPP_SRC_FILES src/lib/cpuadd.cpp src/lib/cpuadd.h )
+
+##################LIBRARIES###########################
+######################################################
+#used for non-mex build only
+SET(OPENCV_LIB OpenCV)
+
+#used for cuda build only
+SET(CUDA_LIBS CUDA_CUBLAS_LIBRARIES CUDA_CUFFT_LIBRARIES)
+
+#used for mex, non-mex and cuda build
+SET(EIGEN_LIB Eigen3)
+
+######################################################
+##################SET EVERYTHING UP###################
 ######################################################
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin) #output for executable i.e., EXEF=TRUE
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)    #output for mex-file i.e., MEXF=TRUE
@@ -145,7 +161,7 @@ endif(${MEXF})
 
 ##################EXECUTABLE##########################
 ######################################################
-if(${EXEF}) #now take care of the executabel
+if(${EXEF}) #now take care of the executable
 
   if(${CUDA}) #if cuda is used
     CUDA_ADD_EXECUTABLE( ${PROJECT_NAME} ${CPP_MAIN_FILES} ${SRC_FILES} )
