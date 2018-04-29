@@ -21,7 +21,7 @@ This code has been tested under
 
 ## Getting started
 * Set `MATLAB_ROOT` environment variable in `~/.bashrc` to your installed matlab path, such as  
-   export `MATLAB_ROOT=/usr/local/MATLAB/R2016b`
+   `export MATLAB_ROOT=/usr/local/MATLAB/R2016b`
 * In Terminal do  
    `cd path/to/mweCmakeMexCppCuda/build`  
    `cmake ..`  
