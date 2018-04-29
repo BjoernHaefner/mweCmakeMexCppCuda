@@ -52,9 +52,9 @@ Additionally, this framework uses OpenCV and Eigen as some dummy libraries to sh
 * Eigen is used in the case of building MEX and binary files with or without CUDA support
 * CUBLAS and CUFFT libraries are linked and can be easily extended
 
-## Tips
+## Tips & Troubleshooting
 * It can happen that the building process during `make` fails. This can be due to the fact that the `gpuadd.o` is build twice (haven't found a way to fix this yet). Run `make` a couple of times to overcome this issue or first build with `SET(MEXF TRUE)` and afterwards with `SET(EXEF TRUE)`. For me this error happend every ~10th building process, so I didnt' see the urge of fixing it.
-* If Matlab throws an error like 
+* If Matlab throws an error like
 ```
 Invalid MEX-file '/mweCmakeMexCppCuda/build/lib/mweAddMEX.mexa64':
 /MATLAB/R2016b/bin/glnxa64/../../sys/os/glnxa64/libstdc++.so.6: version `GLIBCXX_3.4.21' not found (required by /mweCmakeMexCppCuda/build/lib/mweAddMEX.mexa64)
