@@ -6,7 +6,9 @@
 #include <stdlib.h>     /* malloc, free, rand */
 
 //OpenCV
+#ifdef USE_OPENCV
 #include <opencv2/opencv.hpp>
+#endif //USE_OPENCV
 
 //own code
 #include "lib/add.h"
@@ -40,6 +42,7 @@ int main(int argc, char *argv[])
   free(B);
   free(C);
 
+#ifdef USE_OPENCV
   //show the input image
   printf("Last, we quickly read an image to check if opencv works in the binary version...\n");
   cv::Mat image;
@@ -54,7 +57,7 @@ int main(int argc, char *argv[])
   {
     printf("Could read image. OpenCV is working\n");
   }
-
+#endif //USE_OPENCV
   return 0;
 
 }

@@ -9,6 +9,8 @@ SET(MEXF TRUE) #generate mex file for matlab usage
 SET(EXEF TRUE) #generate executable to call code from commandline
 SET(CUDA TRUE) #use cuda for speedup if applicable
 
+SET(OPENCV_INSTALLED FALSE)
+SET(EIGEN_INSTALLED FALSE)
 ##################CPP & CUDA FILES####################
 ######################################################
 #file(s) for binary version only
@@ -28,14 +30,9 @@ SET(CPP_SRC_FILES src/lib/cpuadd.cpp src/lib/cpuadd.h )
 
 ##################LIBRARIES###########################
 ######################################################
-#used for non-mex build only
-SET(OPENCV_LIB OpenCV)
 
-#used for cuda build only
+#used for cuda build only (nothing happens if ${CUDA}==FALSE)
 SET(CUDA_LIBS CUDA_CUBLAS_LIBRARIES CUDA_CUFFT_LIBRARIES)
-
-#used for mex, non-mex and cuda build
-SET(EIGEN_LIB Eigen3)
 
 ######################################################
 ##################SET EVERYTHING UP###################
@@ -52,8 +49,14 @@ MESSAGE(STATUS "CUDA=" ${CUDA})
 
 ##################FIND OTHER LIBRARIES################
 ######################################################
-FIND_PACKAGE( ${OPENCV_LIB} REQUIRED)
-FIND_PACKAGE( ${EIGEN_LIB}  REQUIRED)
+if (${OPENCV_INSTALLED})
+  ADD_DEFINITIONS(-DUSE_OPENCV)
+  FIND_PACKAGE( OpenCV REQUIRED)
+endif(${OPENCV_INSTALLED})
+if (${EIGEN_INSTALLED})
+  ADD_DEFINITIONS(-DUSE_EIGEN)
+  FIND_PACKAGE( Eigen3  REQUIRED)
+endif(${EIGEN_INSTALLED})
 
 ##################FIND MATLAB#########################
 ######################################################
@@ -141,8 +144,11 @@ if(${MEXF})
 
   TARGET_LINK_LIBRARIES(${MEX_LIB_NAME}
                         ${MATLAB_LIBRARIES}
-                        Eigen3::Eigen #in any case link to Eigen library for the mex file
                         )
+  if (${EIGEN_INSTALLED})
+    TARGET_LINK_LIBRARIES(${MEX_LIB_NAME} Eigen3::Eigen) #link to eigen library (available in ${PROJECT_NAME} target (s. below) and ${MEX_LIB_NAME} target )
+  endif(${EIGEN_INSTALLED})
+
   if(${CUDA})
     MESSAGE(STATUS "LINKING CUDA LIBRARIES: " ${CUDA_LIBS_SEP})
     TARGET_LINK_LIBRARIES(${MEX_LIB_NAME}
@@ -168,16 +174,19 @@ if(${EXEF}) #now take care of the executable
     TARGET_LINK_LIBRARIES(${PROJECT_NAME}
                           ${CUDA_LIBRARIES} #Cudart library.
                           ${CUDA_LIBS_SEP} #own specified libraries from above. Note the double "${${}}", this is because above the CUDA_CUBLAS_LIBRARIES is unknown and first known after Cuda was found
-                          ${OpenCV_LIBS} #load opencv libs
-                          Eigen3::Eigen #link to eigen library for binary with cuda support
                           )
+
   else(${CUDA})#is cuda is not used
     ADD_EXECUTABLE(${PROJECT_NAME} ${CPP_MAIN_FILES} ${SRC_FILES})
-    TARGET_LINK_LIBRARIES(${PROJECT_NAME}
-                          ${OpenCV_LIBS} #load opencv libs
-                          Eigen3::Eigen #link to eigen library for binary without cuda support
-                          )
-endif(${CUDA})
+  endif(${CUDA})
+
+  if (${OPENCV_INSTALLED})
+    TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${OpenCV_LIBS}) #load opencv libs (available only in ${PROJECT_NAME} target)
+  endif(${OPENCV_INSTALLED})
+
+  if (${EIGEN_INSTALLED})
+    TARGET_LINK_LIBRARIES(${PROJECT_NAME} Eigen3::Eigen) #link to eigen library (available in ${PROJECT_NAME} target and ${MEX_LIB_NAME} target (s. above))
+  endif(${EIGEN_INSTALLED})
 
 endif(${EXEF})
 

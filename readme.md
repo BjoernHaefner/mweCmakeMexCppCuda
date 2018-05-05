@@ -2,17 +2,20 @@
 This work is build upon the following two helpful links:
 [CUDA-MEX-CMAKE](https://de.mathworks.com/matlabcentral/fileexchange/45505-cuda-mex-cmake) and [MEX-CMAKE](https://de.mathworks.com/matlabcentral/fileexchange/45522-mex-cmake)
 
-This is a cmake code template to demonstrate how to compile a Matlab MEX file with or without CUDA capability AND additionally how to compile a binary at the same time without MEX support with or without CUDA capability. Furthermore, libraries can be included that 
-* are used by the binary only
-* are used by cuda only
-* are used by the binary, cuda and the mex file.
+This is a CMake code template to demonstrate
+* how to compile a Matlab MEX file with or without CUDA capability AND
+* how to compile a binary with or without CUDA capability at the same time.
+Furthermore, libraries can be included that 
+* are used by the binary only (e.g. OpenCV)
+* are used by CUDA only (e.g. cuBLAS & cuFFT)
+* are used by the binary and the mex file (e.g. Eigen).
 
 ## Requirements
 * [CMake](https://cmake.org/) (mandatory)
 * [CUDA](https://developer.nvidia.com/cuda-downloads) (optional)
 * [MATLAB](https://de.mathworks.com/) (optional)
-* [OpenCV](https://opencv.org/) (mandatory dummy)
-* [Eigen3](http://eigen.tuxfamily.org/index.php?title=Main_Page) (mandatory dummy)
+* [OpenCV](https://opencv.org/) (optional dummy)
+* [Eigen3](http://eigen.tuxfamily.org/index.php?title=Main_Page) (optional dummy)
 
 ## Tested
 This code has been tested under 
@@ -23,7 +26,7 @@ This code has been tested under
 * Set `MATLAB_ROOT` environment variable in to your installed matlab path, such as  
    `export MATLAB_ROOT=/usr/local/MATLAB/R2016b` in `~/.bashrc` (Linux)  
    `export MATLAB_ROOT=/Applications/MATLAB_R2016b.app` in `~/.bash_profile` (MacOS)  
-   Add system variable `MATLAB_ROOT=D:\\Program Files\\MATLAB\\R2016b` (Windows) (not yet tested)  
+   Add system variable `MATLAB_ROOT=D:\\Program Files\\MATLAB\\R2016b` (Windows) (not yet tested)
 * In Terminal do  
    `cd path/to/mweCmakeMexCppCuda/build`  
    `cmake ..`  
@@ -39,6 +42,8 @@ This code has been tested under
 * Decide whether to generate a mex file: `SET(MEXF {TRUE,FALSE})`
 * Decide whether to generate a binary file: `SET(EXEF {TRUE,FALSE})`
 * Decide whether to have CUDA support: `SET(CUDA {TRUE,FALSE})`
+* Decide whether you would like to use OpenCV: `SET(OPENCV_INSTALLED {TRUE,FALSE})`
+* Decide whether you would like to use Eigen: `SET(EIGEN_INSTALLED {TRUE,FALSE})`
 
 ### File linking
 There are multiple integrated ways to link source code e.g.,
