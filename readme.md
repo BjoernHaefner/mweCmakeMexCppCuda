@@ -16,12 +16,14 @@ This is a cmake code template to demonstrate how to compile a Matlab MEX file wi
 
 ## Tested
 This code has been tested under 
-* Ubuntu 16.04; cmake3.5.1; cuda8.0; MATLAB R2016b
-* TODO: Test using MacOS and Windows (To compile the test MEX under Windows, first set `MATLAB_ROOT` environment variable to your installed matlab path, then, use cmake or cmake-gui to generate building project according to installed compiler (e.g. MSVS), then, build the generated project using this compiler.)
+* Ubuntu 16.04; CMake 3.5.1; CUDA 8.0; MATLAB R2016b
+* TODO: Test using MacOS (without CUDA support) and Windows (with and without CUDA support)
 
 ## Getting started
-* Set `MATLAB_ROOT` environment variable in `~/.bashrc` to your installed matlab path, such as  
-   `export MATLAB_ROOT=/usr/local/MATLAB/R2016b`
+* Set `MATLAB_ROOT` environment variable in to your installed matlab path, such as  
+   `export MATLAB_ROOT=/usr/local/MATLAB/R2016b` in `~/.bashrc` (Linux)  
+   `export MATLAB_ROOT=/Applications/MATLAB_R2016b.app` in `~/.bash_profile` (MacOS)  
+   Add system variable `MATLAB_ROOT=D:\\Program Files\\MATLAB\\R2016b` (Windows) (not yet tested)  
 * In Terminal do  
    `cd path/to/mweCmakeMexCppCuda/build`  
    `cmake ..`  
