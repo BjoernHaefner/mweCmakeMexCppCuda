@@ -4,7 +4,8 @@ This work is build upon the following two helpful links:
 
 This is a CMake code template to demonstrate
 * how to compile a Matlab MEX file with or without CUDA capability AND
-* how to compile a binary with or without CUDA capability at the same time.
+* how to compile a binary with or without CUDA capability at the same time.  
+
 Furthermore, libraries can be included that 
 * are used by the binary only (e.g. OpenCV)
 * are used by CUDA only (e.g. cuBLAS & cuFFT)
