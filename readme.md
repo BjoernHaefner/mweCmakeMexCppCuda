@@ -62,6 +62,7 @@ Additionally, this framework uses OpenCV and Eigen as some dummy libraries to sh
 
 ## Tips & Troubleshooting
 * It can happen that the building process during `make` fails. This can be due to the fact that the `gpuadd.o` is build twice (haven't found a way to fix this yet). Run `make` a couple of times to overcome this issue or first build with `SET(MEXF TRUE)` and afterwards with `SET(EXEF TRUE)`. For me this error happend every ~10th building process, so I didnt' see the urge of fixing it.
+
 * If Matlab throws an error like
 ```
 Invalid MEX-file '/mweCmakeMexCppCuda/build/lib/mweAddMEX.mexa64':
@@ -71,6 +72,7 @@ then start Matlab from terminal and preload the the `/usr/lib/x86_64-linux-gnu/l
 ```
 LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libstdc++.so.6" matlab
 ```
+
 * If you get some linker error of `memcpy` within `string.h`, uncomment `-D_FORCE_INLINES` in CMakeLists.txt  
 This can be due to using an older CUDA version.
 
