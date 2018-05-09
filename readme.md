@@ -24,9 +24,10 @@ This code has been tested under
 
 ## Getting started
 * Set `MATLAB_ROOT` environment variable in to your installed matlab path, such as  
-   `export MATLAB_ROOT=/usr/local/MATLAB/R2016b` in `~/.bashrc` (Linux)  
-   `export MATLAB_ROOT=/Applications/MATLAB_R2016b.app` in `~/.bash_profile` (MacOS)  
+   `export MATLAB_ROOT='/usr/local/MATLAB/R2016b'` in `~/.bashrc` (Linux)  
+   `export MATLAB_ROOT='/Applications/MATLAB_R2016b.app'` in `~/.bash_profile` (MacOS)  
    Add system variable `MATLAB_ROOT=D:\\Program Files\\MATLAB\\R2016b` (Windows) (not yet tested)
+* (Optional) Copy the `Eigen` directory from [Eigen](https://github.com/eigenteam/eigen-git-mirror) into the `third_party` directory.
 * In Terminal do  
    `cd path/to/mweCmakeMexCppCuda/build`  
    `cmake ..`  
@@ -43,7 +44,7 @@ This code has been tested under
 * Decide whether to generate a binary file: `SET(EXEF {TRUE,FALSE})`
 * Decide whether to have CUDA support: `SET(CUDA {TRUE,FALSE})`
 * Decide whether you would like to use OpenCV: `SET(OPENCV_INSTALLED {TRUE,FALSE})`
-* Decide whether you would like to use Eigen: `SET(EIGEN_INSTALLED {TRUE,FALSE})`
+* Decide whether you would like to use Eigen: `SET(USE_EIGEN {TRUE,FALSE})`
 
 ### File linking
 There are multiple integrated ways to link source code e.g.,
@@ -70,4 +71,7 @@ then start Matlab from terminal and preload the the `/usr/lib/x86_64-linux-gnu/l
 ```
 LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libstdc++.so.6" matlab
 ```
+* If you get some linker error of `memcpy` within `string.h`, uncomment `-D_FORCE_INLINES` in CMakeLists.txt  
+This can be due to using an older CUDA version.
 
+* If during the compile process with CUDA support there is a `reference to unknown` error and you use cuda<8.0, uncomment the line calling `cublasAxpyEx` in `src/lib/cuda/gpuadd.cu`

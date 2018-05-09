@@ -10,7 +10,7 @@ SET(EXEF TRUE) #generate executable to call code from commandline
 SET(CUDA TRUE) #use cuda for speedup if applicable
 
 SET(OPENCV_INSTALLED FALSE)
-SET(EIGEN_INSTALLED FALSE)
+SET(USE_EIGEN TRUE) #remember to clone the eigen repository into third_party dir
 ##################CPP & CUDA FILES####################
 ######################################################
 #file(s) for binary version only
@@ -53,10 +53,12 @@ if (${OPENCV_INSTALLED})
   ADD_DEFINITIONS(-DUSE_OPENCV)
   FIND_PACKAGE( OpenCV REQUIRED)
 endif(${OPENCV_INSTALLED})
-if (${EIGEN_INSTALLED})
+if (${USE_EIGEN})
   ADD_DEFINITIONS(-DUSE_EIGEN)
-  FIND_PACKAGE( Eigen3  REQUIRED)
-endif(${EIGEN_INSTALLED})
+  SET(EIGEN_ROOT ${PROJECT_SOURCE_DIR}/third_party/)
+  FIND_PACKAGE(Eigen REQUIRED)
+  INCLUDE_DIRECTORIES(${EIGEN_INCLUDE_DIR})
+endif(${USE_EIGEN})
 
 ##################FIND MATLAB#########################
 ######################################################
@@ -117,6 +119,7 @@ if(${CUDA})
 	#--debug #possibility to debug host code; uncomment for speedup
 	-O3 #specify optimization level for host code
 	-Wno-deprecated-gpu-targets #to suppress warning for deprecated architectures
+	#-D_FORCE_INLINES #uncommet if cuda<8.0 and some linker error of memcpy in string.h is thrown during build
 	)
 
 else(${CUDA})#if cuda is not used 
@@ -145,9 +148,6 @@ if(${MEXF})
   TARGET_LINK_LIBRARIES(${MEX_LIB_NAME}
                         ${MATLAB_LIBRARIES}
                         )
-  if (${EIGEN_INSTALLED})
-    TARGET_LINK_LIBRARIES(${MEX_LIB_NAME} Eigen3::Eigen) #link to eigen library (available in ${PROJECT_NAME} target (s. below) and ${MEX_LIB_NAME} target )
-  endif(${EIGEN_INSTALLED})
 
   if(${CUDA})
     MESSAGE(STATUS "LINKING CUDA LIBRARIES: " ${CUDA_LIBS_SEP})
@@ -183,10 +183,6 @@ if(${EXEF}) #now take care of the executable
   if (${OPENCV_INSTALLED})
     TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${OpenCV_LIBS}) #load opencv libs (available only in ${PROJECT_NAME} target)
   endif(${OPENCV_INSTALLED})
-
-  if (${EIGEN_INSTALLED})
-    TARGET_LINK_LIBRARIES(${PROJECT_NAME} Eigen3::Eigen) #link to eigen library (available in ${PROJECT_NAME} target and ${MEX_LIB_NAME} target (s. above))
-  endif(${EIGEN_INSTALLED})
 
 endif(${EXEF})
 
